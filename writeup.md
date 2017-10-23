@@ -4,7 +4,7 @@
 
 [//]: # (Image References)
 
-[image01]: .docs/misc/image_cover.png
+[image_cover]: ./docs/misc/image_cover.png
 
 
 
@@ -14,7 +14,7 @@ The objective of this project was to design a deep neural network allowing a qua
 
 The image below shows the quadcopter following the target of interest, and the images processed by the neural network (left -"pyqtgraph"). The target of interest is denoted by a dark purple silhouette, while the other people are denoted by green silhouettes. 
 
-![alt text][image01]
+![alt text][image_cover]
 
 ## Network architecture
 
