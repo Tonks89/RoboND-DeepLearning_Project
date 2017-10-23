@@ -4,7 +4,7 @@
 
 [//]: # (Image References)
 
-[image01]: ./misc_images/image01.png
+[image01]: .docs/misc/image01.png
 
 
 
@@ -12,9 +12,9 @@
 
 The objective of this project was to design a deep neural network allowing a quadcopter to locate a target of interest (person) in a series of images captured with it's camera. Using this information, the quadcopter is able to follow around the target in an environment populated with other virtual humans and objects. 
 
-The image below shows the quadcopter following the person of interest, and the images processed by the neural network.
+The image below shows the quadcopter following the target of interest, and the images processed by the neural network (left -"pyqtgraph"). The target of interest is denoted by a dark purple silhouette, while the other people are denoted by green silhouettes. 
 
-* ----------image---------- *
+![alt text][image01]
 
 ## Network architecture
 
