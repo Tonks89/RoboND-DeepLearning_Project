@@ -5,6 +5,8 @@
 [//]: # (Image References)
 
 [image_cover]: ./docs/misc/image_cover.png
+[image_02]: ./docs/misc/image_02.png
+[image_03]: ./docs/misc/image_03.png
 
 
 
@@ -158,14 +160,18 @@ Where the extra_layer, and 1 x 1 convolution were implemented as regular convolu
 
 The previous network was trained (with the Adam optimizer) and validated using Udacity's image data set. The final model can be found in the *data/weights/* directory, as *model_weights5*.
 
-The resulting training and validation curves are almost flat, with an average loss of around 0.027 for the training curve, and of 0.010 for the validation curve. This means that right after the first epoch has passed (with its 200 batches), the network is already able to reduce the error significantly.
+As shown below, the resulting training and validation curves are almost flat, with an average loss of around 0.027 for the training curve, and of 0.010 for the validation curve. This means that right after the first epoch has passed (with its 200 batches), the network is already able to reduce the error significantly.
+
+![alt text][image_02]
 
 After training, the final network architecture was tested in the quadcopter simulator, resulting in a *final score* of 0.46 (above the *base requirement* of 0.4). This allowed the quadcopter to follow the "hero" throughout crowded and uncrowded areas in a virtual environment.
 
 The network performed particularly well once the "hero" was identified, which was reflected in an *average intersection over union* of 0.92.
 The following images shows the quadcopter following the hero through a crowd:
 
-*----------image----------*
+![alt text][image_03]
+
+![alt text][image_cover]
 
 Click ***here*** to see a video of this simulation.
 
