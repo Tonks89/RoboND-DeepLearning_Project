@@ -189,7 +189,7 @@ Click [here](https://www.youtube.com/watch?v=6PC8Qb1PBAs) to see a video of this
 
 * The final network architecture accomplished this project's goals and doesn't take alot of time to train. However, I would like to experiment with even more complex architectures and analyze their impact on the final score.
 
-* Finally, tuning the hyperparameters by hand can be inefficient and time consuming a solution could be to use the grid search capability from the scikit-learn python machine learning library to automate this process, as shown [here](https://machinelearningmastery.com/grid-search-hyperparameters-deep-learning-models-python-keras/)
+* Finally, tuning the hyperparameters by hand can be inefficient and time consuming a solution could be to use the grid search capability from the scikit-learn python machine learning library to automate this process, as shown [here](https://machinelearningmastery.com/grid-search-hyperparameters-deep-learning-models-python-keras/).
 
 
 
