@@ -173,7 +173,7 @@ The following images shows the quadcopter following the hero through a crowd:
 
 ![alt text][image_cover]
 
-Click ***here*** to see a video of this simulation.
+Click [here](https://www.youtube.com/watch?v=6PC8Qb1PBAs) to see a video of this simulation.
 
 
 
