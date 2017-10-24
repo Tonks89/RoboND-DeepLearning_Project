@@ -23,7 +23,7 @@ The image below shows the quadcopter following the target of interest, and the i
 
 For this project we are interested not only identifying the target, but also determining where in the picture the target is located so that the quadcopter can adjust its course accordingly and follow. Thus, the spatial information in the image matters. Deep neural networks with fully connected layers or convolutional neural networks do not preserve this information. However, fully convolutional neural networks (FCNs) do.
 
-FCNs allow us to extract features with different levels of complexity from images, and the use these features to segment the images into meaningful pieces. Thus, an FCN was used to segment that quadcopter images into three categories: background, other people, hero (target of interest).
+FCNs allow us to extract features with different levels of complexity from images, and then use these features to segment the images into meaningful pieces. Thus, an FCN was used to segment the quadcopter images into three categories: background, other people, hero (target of interest).
 
 In general, FCNs are composed of 3 parts: Encoders, a 1x1 convolution, and decoders.
 
@@ -31,7 +31,7 @@ In general, FCNs are composed of 3 parts: Encoders, a 1x1 convolution, and decod
 ![alt text][image_01]
 
 
-The encoders basically breakdown the input images into key features: Starting with simple features (such as basic shapes in the first layers) and moving on to more complex features (or combinations of simple shapes in the last layers). With each encoder, the resolution of the original image is reduced and the number of extracted features increases (as shown by the increase in depth of each layer).
+The encoders basically breakdown the input images into key features: Starting with simple features (such as basic shapes) in the first encoders, and moving on to more complex features (or combinations of simple shapes) in the last encoders. With each encoder, the resolution of the original image is reduced and the number of extracted features increases (as shown by the increase in depth of each encoder layer).
 Each of these layers is the result of convolving a filter over that layer's input. The parameters or weights of these filters are learned during training and they determine what kind of features are extracted.
 
 
@@ -45,7 +45,7 @@ Finally, the objective of the decoders are to map the features extracted by the 
 For this project the selected architechture is composed of the following elements:
 
 
-* An extra convolutional layer (depth 16) after the input image and before the encoders for later use in layer fusion. This layer extracts features, but preserves the original image size. 
+* An extra convolutional layer (depth 16), after the input image and before the encoders, for later use in layer fusion. This layer extracts features, but preserves the original image size. 
 
 * 3 encoders (depths 32, 64, 128)
 
@@ -84,7 +84,7 @@ workers = 2
 
 * Number of epochs: I began with 10 epochs, which resulted in a score already above the required score. However, I wanted to verify if the performance would improve with more epochs. I doubled the epochs to 20 and it did. Therefore, I selected 20 as the number of epochs.
 
-* Step per epoch, validation steps and workers: These parameters were left with their default values since, together with the above tuned parameters, they yielded a final score above the required one. 
+* Step per epoch, validation steps, and workers: These parameters were left with their default values since, together with the above tuned parameters, they yielded a final score above the required one. 
 
 
 
@@ -122,7 +122,7 @@ def decoder_block(small_ip_layer, large_ip_layer, filters):
 
 ``` 
 
-The implementation of final model is featured below:
+The implementation of the final model is featured below:
 
 
 ``` python
@@ -161,7 +161,7 @@ Where the extra_layer, and 1 x 1 convolution were implemented as regular convolu
 
 The previous network was trained (with the Adam optimizer) and validated using Udacity's image data set. The final model can be found in the *data/weights/* directory, as *model_weights5*.
 
-As shown below, the resulting training and validation curves are almost flat, with an average loss of around 0.027 for the training curve, and of 0.010 for the validation curve. This means that right after the first epoch has passed (with its 200 batches), the network is already able to reduce the error significantly.
+As shown below, the resulting training and validation curves are almost flat, with an average loss of around 0.027 for the training curve, and of 0.010 for the validation curve. This could mean that right after the first epoch has passed (with its 200 batches), the network is already able to reduce the error significantly.
 
 ![alt text][image_02]
 
