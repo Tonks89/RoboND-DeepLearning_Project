@@ -5,6 +5,7 @@
 [//]: # (Image References)
 
 [image_cover]: ./docs/misc/image_cover.png
+[image_01]: ./docs/misc/image_01.PNG
 [image_02]: ./docs/misc/image_02.png
 [image_03]: ./docs/misc/image_03.png
 
@@ -14,7 +15,7 @@
 
 The objective of this project was to design a deep neural network allowing a quadcopter to locate a target of interest (person) in a series of images captured with it's camera. Using this information, the quadcopter is able to follow around the target in an environment populated with other virtual humans and objects. 
 
-The image below shows the quadcopter following the target of interest, and the images processed by the neural network (left -"pyqtgraph"). The target of interest is denoted by a dark purple silhouette, while the other people are denoted by green silhouettes. 
+The image below shows the quadcopter following the target of interest, and the images processed by the neural network (right -"pyqtgraph"). The target of interest is denoted by a dark purple silhouette, while the other people are denoted by green silhouettes. 
 
 ![alt text][image_cover]
 
@@ -22,29 +23,29 @@ The image below shows the quadcopter following the target of interest, and the i
 
 For this project we are interested not only identifying the target, but also determining where in the picture the target is located so that the quadcopter can adjust its course accordingly and follow. Thus, the spatial information in the image matters. Deep neural networks with fully connected layers or convolutional neural networks do not preserve this information. However, fully convolutional neural networks (FCNs) do.
 
-FCNs allow us to extract features with different levels of complexity from images, and the use these features to segment the images into meaningful pieces. Thus, an FCN was used to segment that quadcopter images into three categories: background, other people, hero (person of interst).
+FCNs allow us to extract features with different levels of complexity from images, and the use these features to segment the images into meaningful pieces. Thus, an FCN was used to segment that quadcopter images into three categories: background, other people, hero (target of interest).
 
 In general, FCNs are composed of 3 parts: Encoders, a 1x1 convolution, and decoders.
 
 
-* ------ image -------*
+![alt text][image_01]
 
 
-The encoders basically breakdown the input images into key features: Starting with simple features (such as basic shapes in the first layers) and moving on to more complex features (or combinations of simple shapes in the last layers). With each encoder the resolution of the original image is reduced and the number of extracted features increases (as shown by the increase in depth of each layer).
+The encoders basically breakdown the input images into key features: Starting with simple features (such as basic shapes in the first layers) and moving on to more complex features (or combinations of simple shapes in the last layers). With each encoder, the resolution of the original image is reduced and the number of extracted features increases (as shown by the increase in depth of each layer).
 Each of these layers is the result of convolving a filter over that layer's input. The parameters or weights of these filters are learned during training and they determine what kind of features are extracted.
 
 
-Next, a 1x1 convolution is applied on the output of the last encoder. This convolution consists in applying 1x1 filters (kernels),  which results a new set of layers with the same width and height as the layers of the last encoder. 
+Next, a 1x1 convolution is applied on the output of the last encoder. This convolution consists in applying 1x1 filters (kernels),  which results in a new set of layers with the same width and height as the layers of the last encoder. 
 This convolution is preferred for image segmentation (instead of fully connected layers) because it preserves spatial information and also allows the network to work with images of different sizes. Fully connected layers flatten the output of the last encoder, thus they are better suited for classification tasks where spatial information is not important and images are the same size.
 
 
-Finally, the objective of the decoders are to map the features extracted by the encoders into an image with the same resolution as the input image. This is done by fusing (concatenating) various lower and higher resolution layers. For instance, in the image above the input to *Decoder 1* is upsampled and then fused with the layers of *Encoder 2*. This process is repeated until arriving to an image with the same resolution as the input image but segmented into three categories (3 channels): background, other people, hero.
+Finally, the objective of the decoders are to map the features extracted by the encoders into an image with the same resolution as the input image. This is done by fusing (concatenating) various lower and higher resolution layers. For instance, in the image above the input to *Decoder 1* is upsampled and then fused with the layers of *Encoder 2*. This process is repeated until arriving to an image with the same resolution as the input image but segmented into three categories (3 channels): background, other people, and hero.
 
 
-For this project the specific selected architechture is composed of the following elements:
+For this project the selected architechture is composed of the following elements:
 
 
-* An extra convolutional layer (depth 16) after the input image and before the encoders for later used in layer fusion. This layer extracts features but preserves the original image size. 
+* An extra convolutional layer (depth 16) after the input image and before the encoders for later use in layer fusion. This layer extracts features, but preserves the original image size. 
 
 * 3 encoders (depths 32, 64, 128)
 
@@ -52,11 +53,11 @@ For this project the specific selected architechture is composed of the followin
 
 * 3 decoders (depths 128, 64, 32)
 
-* A convolutional layer (depth 3) with the same resolution as the last decoding layer but with 3 channels for: background, other people, hero.
+* Output layer (depth 3) with the same resolution as the last decoder layer, but with 3 channels for: background, other people, and hero.
 
-Initially I began with an architecture consisting of a first convolutional layer, 2 encoders, a 1 x 1 convolutional layer, 2 decoders, and a final convolutional layer (all with small depths). However, after trying different combinations of hyperparameters the performance (or final score) was stuck at around 0.35. 
+Initially, I began with an architecture consisting of a first convolutional layer, 2 encoders, a 1 x 1 convolutional layer, 2 decoders, and an output layer (all with small depths). However, after trying different combinations of hyperparameters the performance (or final score) was stuck at around 0.35. 
 
-This showed that the this architecture was too simple and didn't capture enough features to correctly discriminate between the desired classes.
+This revealed that this architecture was too simple and didn't capture enough features to correctly discriminate between the desired classes.
 Thus, I decided to go for a more complex architecture adding one more encoder and decoder and increasing the depth of each layer, which increased the final score.
 
 
@@ -66,7 +67,7 @@ Thus, I decided to go for a more complex architecture adding one more encoder an
 
 The performance or the ability of the network to correctly segment the image into the three classes of interest, also depends on the network's hyperparameters: batch size, learning rate, number of epochs, steps per epoch, validation steps and workers.
 
-I selected the values for these parameters through manual tuning, always aiming at a good funcionality (final score above the required threshold: 0.4) and simplicity:
+I selected the values for these parameters through manual tuning, aiming for a good functionality (final score above the required threshold: 0.4) and simplicity:
 
 ``` python
 learning_rate = 0.005 
@@ -77,7 +78,7 @@ validation_steps = 50
 workers = 2
 ``` 
 
-* Batch size: As stated [here](https://machinelearningmastery.com/gentle-introduction-mini-batch-gradient-descent-configure-batch-size/), usually the batch size is tuned with respect to computational architecture where the network will be executed (e.g. memory requirement of the GPU or CPU). I tried batch sizes from 32 to 128 with my first architecture, and the performance didn't change much, so I selected a batch size of 32.
+* Batch size: As stated [here](https://machinelearningmastery.com/gentle-introduction-mini-batch-gradient-descent-configure-batch-size/), usually the batch size is tuned with respect to the computational architecture where the network will be executed (e.g. memory requirement of the GPU or CPU). I tried batch sizes from 32 to 128 with my first architecture, and the performance didn't change much, so I selected a batch size of 32.
 
 * Learning rate: I tried different learning rates, from 0.1 to 0.005. I noticed that as the learning rate decreased, the performance of the network increased. I selected a learning rate of 0.005 since it yielded a score above the required score (0.4).
 
@@ -106,7 +107,7 @@ def encoder_block(input_layer, filters, strides):
 
 
 
-The decoder blocks consisted of an upsampling the lowest resolution layer by a factor of 2, concatenating the lower and higher resolution layers, and applying a separable convolution to the result of this concatenation:
+The decoder blocks consisted in upsampling the lowest resolution layer by a factor of 2, concatenating the lower and higher resolution layers, and applying a separable convolution to the result of this concatenation:
 
 ``` python
 def decoder_block(small_ip_layer, large_ip_layer, filters):
@@ -167,7 +168,7 @@ As shown below, the resulting training and validation curves are almost flat, wi
 After training, the final network architecture was tested in the quadcopter simulator, resulting in a *final score* of 0.46 (above the *base requirement* of 0.4). This allowed the quadcopter to follow the "hero" throughout crowded and uncrowded areas in a virtual environment.
 
 The network performed particularly well once the "hero" was identified, which was reflected in an *average intersection over union* of 0.92.
-The following images shows the quadcopter following the hero through a crowd:
+The following images show the quadcopter following the hero through a crowd:
 
 ![alt text][image_03]
 
@@ -189,7 +190,7 @@ Click [here](https://www.youtube.com/watch?v=6PC8Qb1PBAs) to see a video of this
 
 * The final network architecture accomplished this project's goals and doesn't take alot of time to train. However, I would like to experiment with even more complex architectures and analyze their impact on the final score.
 
-* Finally, tuning the hyperparameters by hand can be inefficient and time consuming a solution could be to use the grid search capability from the scikit-learn python machine learning library to automate this process, as shown [here](https://machinelearningmastery.com/grid-search-hyperparameters-deep-learning-models-python-keras/).
+* Finally, tuning the hyperparameters by hand can be inefficient and time consuming. A solution could be to use the grid search capability from the scikit-learn python machine learning library to automate this process, as shown [here](https://machinelearningmastery.com/grid-search-hyperparameters-deep-learning-models-python-keras/).
 
 
 
