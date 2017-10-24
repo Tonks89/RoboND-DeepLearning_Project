@@ -23,7 +23,7 @@ The image below shows the quadcopter following the target of interest, and the i
 
 For this project we are interested not only identifying the target, but also determining where in the picture the target is located so that the quadcopter can adjust its course accordingly and follow. Thus, the spatial information in the image matters. Deep neural networks with fully connected layers or convolutional neural networks do not preserve this information. However, fully convolutional neural networks (FCNs) do.
 
-FCNs allow us to extract features with different levels of complexity from images, and then use these features to segment the images into meaningful pieces. Thus, an FCN was used to segment the quadcopter images into three categories: background, other people, hero (target of interest).
+FCNs allow us to extract features with different levels of complexity from images, and then use these features to segment the images into meaningful pieces. Thus, an FCN was used to segment the quadcopter images into three categories: background, other people, and hero (target of interest).
 
 In general, FCNs are composed of 3 parts: Encoders, a 1x1 convolution, and decoders.
 
@@ -55,7 +55,7 @@ For this project the selected architechture is composed of the following element
 
 * Output layer (depth 3) with the same resolution as the last decoder layer, but with 3 channels for: background, other people, and hero.
 
-Initially, I began with an architecture consisting of a first convolutional layer, 2 encoders, a 1 x 1 convolutional layer, 2 decoders, and an output layer (all with small depths). However, after trying different combinations of hyperparameters the performance (or final score) was stuck at around 0.35. 
+Initially, I began with an architecture consisting of a first convolutional layer, 2 encoders, a 1 x 1 convolutional layer, 2 decoders, and an output layer (all with small depths). However, after trying different combinations of hyperparameters the performance (or final score) was still low. 
 
 This revealed that this architecture was too simple and didn't capture enough features to correctly discriminate between the desired classes.
 Thus, I decided to go for a more complex architecture adding one more encoder and decoder and increasing the depth of each layer, which increased the final score.
@@ -65,7 +65,7 @@ Thus, I decided to go for a more complex architecture adding one more encoder an
 
 ## Tuning Hyperparameters
 
-The performance or the ability of the network to correctly segment the image into the three classes of interest, also depends on the network's hyperparameters: batch size, learning rate, number of epochs, steps per epoch, validation steps and workers.
+The ability of the network to correctly segment the image into the three classes of interest, also depends on the network's hyperparameters: batch size, learning rate, number of epochs, steps per epoch, validation steps and workers.
 
 I selected the values for these parameters through manual tuning, aiming for a good functionality (final score above the required threshold: 0.4) and simplicity:
 
@@ -165,7 +165,7 @@ As shown below, the resulting training and validation curves are almost flat, wi
 
 ![alt text][image_02]
 
-After training, the final network architecture was tested in the quadcopter simulator, resulting in a *final score* of 0.46 (above the *base requirement* of 0.4). This allowed the quadcopter to follow the "hero" throughout crowded and uncrowded areas in a virtual environment.
+The final network architecture resulted in a *final score* of 0.46 (above the *base requirement* of 0.4). It was later used in simulation, which allowed the quadcopter to follow the "hero" through crowded and uncrowded areas in a virtual environment.
 
 The network performed particularly well once the "hero" was identified, which was reflected in an *average intersection over union* of 0.92.
 The following images show the quadcopter following the hero through a crowd:
